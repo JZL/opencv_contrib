@@ -47,33 +47,6 @@ namespace cv
 namespace optflow
 {
 
-class OpticalFlowDeepFlow: public DenseOpticalFlow
-{
-public:
-    OpticalFlowDeepFlow();
-
-    void calc( InputArray I0, InputArray I1, InputOutputArray flow ) CV_OVERRIDE;
-    void collectGarbage() CV_OVERRIDE;
-
-protected:
-    float sigma; // Gaussian smoothing parameter
-    int minSize; // minimal dimension of an image in the pyramid
-    float downscaleFactor; // scaling factor in the pyramid
-    int fixedPointIterations; // during each level of the pyramid
-    int sorIterations; // iterations of SOR
-    float alpha; // smoothness assumption weight
-    float delta; // color constancy weight
-    float gamma; // gradient constancy weight
-    float omega; // relaxation factor in SOR
-
-    int maxLayers; // max amount of layers in the pyramid
-    int interpolationType;
-
-private:
-    std::vector<Mat> buildPyramid( const Mat& src );
-
-};
-
 OpticalFlowDeepFlow::OpticalFlowDeepFlow()
 {
     // parameters
@@ -171,6 +144,8 @@ void OpticalFlowDeepFlow::calc( InputArray _I0, InputArray _I1, InputOutputArray
 void OpticalFlowDeepFlow::collectGarbage() {}
 
 Ptr<DenseOpticalFlow> createOptFlow_DeepFlow() { return makePtr<OpticalFlowDeepFlow>(); }
+Ptr<OpticalFlowDeepFlow> createDeepFlow() { return makePtr<OpticalFlowDeepFlow>(); }
+
 
 }//optflow
 }//cv

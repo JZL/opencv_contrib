@@ -241,7 +241,51 @@ Iterations of Succesive Over-Relaxation (solver)
 -   member float omega
 Relaxation factor in SOR
  */
+class CV_EXPORTS_W OpticalFlowDeepFlow: public DenseOpticalFlow
+{
+public:
+    OpticalFlowDeepFlow();
+    OpticalFlowDeepFlow(float sigma, int minSize,
+            float downscaleFactor, int fixedPointIterations, int sorIterations,
+            float alpha, float delta, float gamma, float omega, int maxLayers,
+            int interpolationType);
+
+    void calc( InputArray I0, InputArray I1, InputOutputArray flow );
+    void collectGarbage();
+    //Added SETters
+    CV_WRAP virtual void setSigma(float val) { sigma = val; }
+    CV_WRAP virtual void setMinSize(int val) { minSize = val; }
+    CV_WRAP virtual void setDownscaleFactor(float val) { downscaleFactor = val; }
+    CV_WRAP virtual void setFixedPointIterations(int val) { fixedPointIterations = val; }
+    CV_WRAP virtual void setSorIterations(int val) { sorIterations = val; }
+    CV_WRAP virtual void setAlpha(float val) { alpha = val; }
+    CV_WRAP virtual void setDelta(float val) { delta = val; }
+    CV_WRAP virtual void setGamma(float val) { gamma = val; }
+    CV_WRAP virtual void setOmega(float val) { omega = val; }
+    CV_WRAP virtual void setMaxLayers(int val) { maxLayers = val; }
+    CV_WRAP virtual void setInterpolationType(int val) { interpolationType = val; }
+
+protected:
+    float sigma; // Gaussian smoothing parameter
+    int minSize; // minimal dimension of an image in the pyramid
+    float downscaleFactor; // scaling factor in the pyramid
+    int fixedPointIterations; // during each level of the pyramid
+    int sorIterations; // iterations of SOR
+    float alpha; // smoothness assumption weight
+    float delta; // color constancy weight
+    float gamma; // gradient constancy weight
+    float omega; // relaxation factor in SOR
+
+    int maxLayers; // max amount of layers in the pyramid
+    int interpolationType;
+
+
+private:
+    std::vector<Mat> buildPyramid( const Mat& src );
+
+};
 CV_EXPORTS_W Ptr<DenseOpticalFlow> createOptFlow_DeepFlow();
+CV_EXPORTS_W Ptr<OpticalFlowDeepFlow> createDeepFlow();
 
 //! Additional interface to the SimpleFlow algorithm - calcOpticalFlowSF()
 CV_EXPORTS_W Ptr<DenseOpticalFlow> createOptFlow_SimpleFlow();
